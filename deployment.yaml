@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: magicalroleapi-deployment
+  labels:
+    app: magicalroleapi
+spec:
+  replicas: 3
+  selector: 
+    matchLabels:
+      app: magicalroleapi
+  template:
+    metadata:
+      labels:
+        app: magicalroleapi
+    spec:
+      containers:
+        - name: magicalroleapi
+          image: magicalroleapi
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+      
