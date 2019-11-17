@@ -10,15 +10,34 @@ Design and implement a simple API that will enumerate Kubernetes RBAC Roles/Clus
 
 * Implementation language choice left to you to decide, however we’d prefer that to be Golang.
 
-# Implementation Notes
+# Assumptions
+
+* Authorisation / authentication of the API is out of scope.
+
+* Only the "default" namespace is considered at this time. It would be trivial to add this
+  as an extra parameter to the API if required.
+
+* The implementation assumes it is executing "in-cluster" on the Kubernetes cluster it is 
+  inspecting, so does not expose configuration options for connecting to a remote cluster.
+
+# Implementation Choices / Discussion
 
 * The required API is naturally an HTTP GET (simply retrieving data, idempotent, doesn't affect the state of any resources it is touching) therefore query parameters / path elements make more sense than a request body (GET has no body, and URL parameters to identify the resource you're requesting is the RESTful way).
-* Flexible response format (json/yaml) could be explicitly requested via a parameter/body attribute, or could be via an HTTP accepts header; depends on use case. Accepts header would be more standardised, but requires client of the API to correctly understand and set this header 
-* No mention made of authentication/authorisation so assuming this is handled elsewhere/out of scope, but would look to verify this in a real use case.
+* Flexible response format (json/yaml) could be explicitly requested via a parameter/body attribute, or could be via an HTTP accepts header; depends on use case. Accepts header would be more standardised, but requires client of the API to correctly understand and set this header. For the purposes of this implementation, a parameter has been chosen.
 
 # API design
 
-## URL pattern
-/magicalroleapi/v1/roles?subjectFilter=a&format=b&pageSize=0&page=1
+/magicalroleapi/v1?subjectFilter=a&format=b
 
-1. subject - 
+1. subjectFilter - one or more subject names in the format NAME1||NAME2||NAME3
+   Supports regexes using format R:regex1||R:regex2
+   Regexes and full matches can be mixed, e.g. mrsheep||R:sys.*
+
+2. format - optional, if specified should be either "json" or "yaml". Defaults to json.
+
+# Installation
+
+1. Build the docker container (docker build -t magicalroleapi .)
+2. Run kubectl apply -f ./deployment.yaml
+3. Run kubectl apply -f ./service.yaml
+4. Browse to port 8080 on the cluster load balancer IP assigned by applying the service.
