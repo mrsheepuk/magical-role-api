@@ -37,7 +37,8 @@ Design and implement a simple API that will enumerate Kubernetes RBAC Roles/Clus
 
 # Installation
 
-1. Build the docker container (docker build -t magicalroleapi .)
-2. Run kubectl apply -f ./deployment.yaml
-3. Run kubectl apply -f ./service.yaml
-4. Browse to port 8080 on the cluster load balancer IP assigned by applying the service.
+To run the latest built version from docker hub:
+
+1. Run kubectl apply -f ./deployment.yaml
+2. Run kubectl apply -f ./service.yaml
+3. Browse to port 8080 on the cluster load balancer IP assigned by applying the service.

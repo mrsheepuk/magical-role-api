@@ -16,8 +16,7 @@ spec:
     spec:
       containers:
         - name: magicalroleapi
-          image: magicalroleapi
-          imagePullPolicy: Never
+          image: mrsheepuk/magicalroleapi:latest
           ports:
             - containerPort: 8080
       
